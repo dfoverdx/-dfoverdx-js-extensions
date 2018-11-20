@@ -1,5 +1,5 @@
 {
-  "name": "js-extensions",
+  "name": "@dfoverdx/js-extensions",
   "version": "0.1.0",
   "description": "Set of common javascript extensions that I use",
   "main": "index.js",
