@@ -1,6 +1,6 @@
 {
   "name": "@dfoverdx/js-extensions",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Set of common javascript extensions that I use",
   "main": "index.js",
   "repository": {
@@ -39,5 +39,9 @@
     "coverageReporters": [
       "text"
     ]
+  },
+  "dependencies": {},
+  "optionalDependencies": {
+    "jquery": "*"
   }
 }

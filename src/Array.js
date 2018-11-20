@@ -135,8 +135,10 @@ Array.prototype.any = function () {
 }
 
 /**
- * Flattens the array recursivel.
+ * Flattens the array recursively.
  *
+ * @template T
+ * @typedef {Array<T>} ArrayOfArrays
  * @example
  * [1, [2, 3]].flat() // => [1, 2, 3]
  *

@@ -5,3 +5,4 @@ import './RegExp';
 import './Set';
 import './Map';
 import './Promise';
+import './jQuery';
