@@ -7,7 +7,7 @@ export default function genConfig(_, options) {
 
     const webpackConfig = {
         entry: {
-            index: './src/index.js'
+            index: ['@babel/polyfill', './src/index.js']
         },
 
         output: {
