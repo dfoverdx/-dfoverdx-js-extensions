@@ -8,6 +8,9 @@ module.exports = {
         ]
     ],
     "env": {
+        "development": {
+            "sourceMaps": "inline"
+        },
         "test": {
             "retainLines": true,
             "sourceMaps": "both"
