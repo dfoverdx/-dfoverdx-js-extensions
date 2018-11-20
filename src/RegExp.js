@@ -92,7 +92,7 @@ RegExp.fakeCaseInsensitive = function(expr) {
     }
 
     if (supportsNegativeLookbehind) {
-        return expr.replace(/(?<!\\)((?:\\\\)*[^\\\s])/g, repCasedChar);
+        return expr.replace(new RegExp('(?<!\\\\)((?:\\\\\\\\)*[^\\\\\\s])', 'g'), repCasedChar);
     }
 
     return expr
