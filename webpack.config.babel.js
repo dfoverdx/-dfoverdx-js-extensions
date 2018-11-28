@@ -7,7 +7,8 @@ export default function genConfig(_, options) {
 
     const webpackConfig = {
         entry: {
-            index: ['@babel/polyfill', './src/index.js']
+            index: ['./src/index.ts']
+            // index: ['@babel/polyfill', './src/index.ts']
         },
 
         output: {
@@ -19,12 +20,21 @@ export default function genConfig(_, options) {
             minimizer: [ new TerserPlugin() ]
         },
 
+        resolve: {
+            extensions: [ '.js', '.ts' ],
+        },
+
         module: {
             rules: [
                 {
                     test: /\.js$/,
                     exclude: /node_modules/,
                     loader: 'babel-loader'
+                },
+                {
+                    test: /\.ts$/,
+                    exclude: /node_modules/,
+                    loader: 'ts-loader'
                 }
             ]
         },

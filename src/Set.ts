@@ -15,3 +15,19 @@ interface Set<T> {
      */
     toJSON(): T[];
 }
+
+Set.prototype.toggle = function(item): boolean {
+    if (this.has(item)) {
+        this.delete(item);
+        return false;
+    } else {
+        this.add(item);
+        return true;
+    }
+}
+
+Set.prototype.toArray = function<T>(): T[] {
+    return Array.from(this);
+}
+
+Set.prototype.toJSON = Set.prototype.toArray;

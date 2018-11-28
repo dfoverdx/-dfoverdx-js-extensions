@@ -1,6 +1,6 @@
 {
   "name": "@dfoverdx/js-extensions",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Set of common javascript extensions that I use",
   "main": "index.js",
   "repository": {
@@ -11,7 +11,8 @@
     "build": "npm run build-prod && npm run build-dev",
     "build-prod": "cross-env NODE_ENV=production webpack --mode production --progress --color",
     "build-dev": "cross-env NODE_ENV=development webpack --mode development --progress --color",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "author": "Jordan Hitch",
   "license": "ISC",
@@ -20,6 +21,8 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
     "@babel/register": "^7.0.0",
+    "@types/node": "^10.12.10",
+    "@types/jest": "^23.3.9",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
@@ -28,21 +31,36 @@
     "regenerator-runtime": "^0.13.1",
     "terser": "^3.10.11",
     "terser-webpack-plugin": "^1.1.0",
+    "ts-jest": "^23.10.4",
+    "ts-loader": "^5.3.0",
+    "typescript": "^3.1.6",
     "webpack": "^4.26.0",
     "webpack-cli": "^3.1.2"
   },
   "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$",
     "setupFiles": [
       "./node_modules/@babel/polyfill/lib/index.js"
     ],
     "transform": {
-      "^.+\\.jsx?$": "babel-jest"
+      "^.+\\.jsx?$": "babel-jest",
+      "^.+\\.ts$": "ts-jest"
     },
     "coverageReporters": [
       "text"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*",
+      "!<rootDir>/src/util/supports.js",
+      "!<rootDir>/src/index.ts",
+      "!<rootDir>/src/**/*.d.ts"
     ]
   },
-  "dependencies": {},
   "optionalDependencies": {
     "jquery": "*"
   }

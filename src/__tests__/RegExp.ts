@@ -45,7 +45,7 @@ describe('RegExp.notStartsWith', () => {
         expect(re.test('FOObar')).toBe(true);
 
         re = RegExp.notStartsWith(/foo/i);
-        expect(re.test('FOObar')).toBe(true);
+        expect(re.test('FOObar')).toBe(false);
     });
 
     it('correctly interprets strings as literal expressions', () => {
@@ -118,7 +118,7 @@ describe('RegExp.notContains', () => {
         expect(re.test('lolFOObar')).toBe(true);
 
         re = RegExp.notContains(/foo/i);
-        expect(re.test('lolFOObar')).toBe(true);
+        expect(re.test('lolFOObar')).toBe(false);
     });
 
     it('correctly interprets strings as literal expressions', () => {

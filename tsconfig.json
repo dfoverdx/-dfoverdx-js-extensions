@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "lib": [ "es2018" ],
+        "allowJs": false,
+        "downlevelIteration": true
+    },
+    "include": [
+        "./src/**/*.d.ts",
+        "./src/**/*.ts",
+    ],
+    "exclude": [
+        "./lib/**/*",
+        "./*.js",
+        "node_modules/**/*"
+    ]
+}
