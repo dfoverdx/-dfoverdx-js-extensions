@@ -1,16 +1,19 @@
 {
     "compilerOptions": {
-        "lib": [ "es2018" ],
+        "lib": [ "es2018", "dom" ],
         "allowJs": false,
-        "downlevelIteration": true
+        "downlevelIteration": true,
+        "declaration": true,
+        "outDir": "./lib"
     },
     "include": [
         "./src/**/*.d.ts",
-        "./src/**/*.ts",
+        "./src/**/*.ts", "src/jQuery.js",
     ],
     "exclude": [
         "./lib/**/*",
         "./*.js",
+        "**/*/__tests__",
         "node_modules/**/*"
     ]
 }

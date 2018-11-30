@@ -1,17 +1,17 @@
 {
   "name": "@dfoverdx/js-extensions",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Set of common javascript extensions that I use",
   "main": "index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/dfoverdx/-dfoverdx-js-extensions.git"
   },
   "scripts": {
-    "build": "npm run gen-dts && npm run build-prod && npm run build-dev",
+    "build": "npm run build-prod && npm run build-dev",
     "build-prod": "cross-env NODE_ENV=production webpack --mode production --progress --color",
     "build-dev": "cross-env NODE_ENV=development webpack --mode development --progress --color",
-    "gen-dts": "dts-generator --name js-extensions --project . --out index.d.ts",
     "test": "jest",
     "coverage": "jest --coverage"
   },
@@ -28,7 +28,6 @@
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "cross-env": "^5.2.0",
-    "dts-generator": "^2.1.0",
     "jest": "^23.6.0",
     "regenerator-runtime": "^0.13.1",
     "terser": "^3.10.11",
