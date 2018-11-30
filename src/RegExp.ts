@@ -102,9 +102,9 @@ RegExp.notContains = function(expr: string|RegExp, flags?: string): RegExp {
     return new RegExp(`^(?:(?!${expr}).)*$`, flags);
 }
 
-const repCasedChar: (_, char: string) => string = (function() {
+const repCasedChar: (_: string, char: string) => string = (function() {
     if (supportsNegativeLookbehind) {
-        return function(_, c: string): string {
+        return function(_: string, c: string): string {
             let cUp = c.toUpperCase(),
                 cLow = c.toLowerCase();
             if (cUp !== cLow) {
@@ -115,7 +115,7 @@ const repCasedChar: (_, char: string) => string = (function() {
         }
     }
 
-    return function(_, c: string): string {
+    return function(_: string, c: string): string {
         let cUp = c.toUpperCase(),
             cLow = c.toLowerCase();
         if (cUp !== cLow) {

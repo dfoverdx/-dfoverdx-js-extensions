@@ -1,17 +1,21 @@
 {
     "compilerOptions": {
-        "lib": [ "es2018", "dom" ],
+        "lib": [ "es2018", "es2017", "es7", "es6", "dom" ],
+        "target": "es5",
+        "module": "commonjs",
         "allowJs": false,
         "downlevelIteration": true,
         "declaration": true,
-        "outDir": "./lib"
+        "outDir": "./lib",
+        // "strict": true,
+        "esModuleInterop": true
     },
     "include": [
-        "./src/**/*.d.ts",
-        "./src/**/*.ts", "src/jQuery.js",
+        "./src/*.ts", "src/jQuery.js",
     ],
     "exclude": [
         "./lib/**/*",
+        "./src/util/**/*",
         "./*.js",
         "**/*/__tests__",
         "node_modules/**/*"
