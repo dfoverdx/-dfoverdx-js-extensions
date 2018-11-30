@@ -18,25 +18,56 @@ declare global {
          */
         singleOrNull(predicate?: (item: T) => boolean): T | null;
 
+        /**
+         * Returns the first element of the array or the first element that matches the given predicate.  Throws an
+         * error if the array is empty or no elements match the predicate.
+         * 
+         * @param predicate A function by which to filter the array before returning the first element.
+         */
         first(predicate?: (item: T) => boolean): T;
 
+        /**
+         * Returns the first element of the array or the first element that matches the given predicate.  Returns `null`
+         * if the array is empty or no elements match the predicate.
+         * 
+         * @param predicate A function by which to filter the array before returning the first element.
+         */
         firstOrNull(predicate?: (item: T) => boolean): T | null;
 
+        /**
+         * Returns the last element of the array or the last element that matches the given predicate.  Throws an error
+         * if the array is empty or no elements match the predicate.
+         * 
+         * @param predicate A function by which to filter the array before returning the last element.
+         */
         last(predicate?: (item: T) => boolean): T;
 
+        /**
+         * Returns the last element of the array or the last element that matches the given predicate.  Returns `null`
+         * if the array is empty or no elements match the predicate.
+         * 
+         * @param predicate A function by which to filter the array before returning the last element.
+         */
         lastOrNull(predicate?: (item: T) => boolean): T | null;
 
         /**
-         * Returns an array containing the elements of the specified original array that meet the condition specified in a
-         * callback function. If no callback is specified, filters out falsey values.
+         * Returns an `Iterable` skipping the first `count` elements in the array.
+         * 
+         * @param count The number of elements to skip.
+         */
+        skip(count: number): Iterable<T>;
+
+        /**
+         * Returns an array containing the elements of the specified original array that meet the condition specified in
+         * a callback function. If no callback is specified, filters out falsey values.
          *
          * @override
-         * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function
-         *                   one time for each element in the array.
-         * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted,
-         *                undefined is used as the this value.
-         * @returns The elements of an array that meet the condition specified in the callback function. If no callback is
-         *          specified, filters out falsey values.
+         * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn
+         *                   function one time for each element in the array.
+         * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is
+         *                omitted, undefined is used as the this value.
+         * @returns The elements of an array that meet the condition specified in the callback function. If no callback
+         *          is specified, filters out falsey values.
          */
         filter(callbackfn?: (val: T, idx: number, array: T[]) => boolean, thisArg?: any): Array<T>;
 
@@ -47,9 +78,9 @@ declare global {
         allAsync(): Promise<boolean>;
 
         /**
-         * Returns `true` if all elements in the array evaluate to truthy, else `false`.  Elements that are functions are
-         * evaluated for truthiness.  Short-circuits if any value evaluates to falsey.  If any element evaluates to a
-         * `Promise`, returns a `Promise` with the resulting value.
+         * Returns `true` if all elements in the array evaluate to truthy, else `false`.  Elements that are functions
+         * are evaluated for truthiness.  Short-circuits if any value evaluates to falsey.  If any element evaluates to
+         * a `Promise`, returns a `Promise` with the resulting value.
          *
          * @see `Array.prototype.allAsync()`
          */
@@ -86,10 +117,13 @@ declare global {
          * 
          * arr.flat() // => [1, undefined]
          */
-        flat(this: JaggedArray<T>): Array<T>;
+        flat(this: JaggedArray<T>): T[];
     }
 
     interface ArrayConstructor {
+        /**
+         * If `val` is already an array, returns `val`.  Else, wraps `val` in an array.
+         */
         makeArray<T>(val: T | T[]): T[];
     }
 }
@@ -154,6 +188,10 @@ Array.prototype.first = function<T>(predicate?: (item: T) => boolean) {
     }
 
     if (!array.length) {
+        if (predicate) {
+            throw new Error('No elements matched the given predicate.');
+        }
+
         throw new Error('Array is empty');
     }
 
@@ -180,36 +218,28 @@ Array.prototype.last = function<T>(predicate?: (item: T) => boolean) {
     }
 
     if (!array.length) {
+        if (predicate) {
+            throw new Error('No elements matched the given predicate.');
+        }
+
         throw new Error('Array is empty');
     }
 
     return array[array.length - 1];
 }
 
+Array.prototype.skip = function*(count: number) {
+    for (let i = count; i < this.length; ++i) {
+        yield this[i];
+    }
+}
+
 const oldFilter = Array.prototype.filter;
 
-type Falsey = undefined | null | false | 0 | '';
-type Truthy<T> = T extends Falsey ? never : T;
-
-/**
- * Returns an array containing the elements of the specified original array that meet the condition specified in a
- * callback function. If no callback is specified, filters out falsey values.
- *
- * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one
- *                   time for each element in the array.
- * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted,
- *                undefined is used as the this value.
- * @returns The elements of an array that meet the condition specified in the callback function. If no callback is
- *          specified, filters out falsey values.
- */
-Array.prototype.filter = function <T>(callbackfn: (val: T, idx: number, array: T[]) => boolean = val => !!val, thisArg?: any): T[] {
+Array.prototype.filter = function<T>(callbackfn: (val: T, idx: number, array: T[]) => boolean = val => !!val, thisArg?: any): T[] {
     return oldFilter.call(this, callbackfn.bind(thisArg));
 }
 
-/**
- * Returns `true` if all values in the array resolves to truthy, else `false`.  Short-circuits if any value evaluates to
- * falsey.
- */
 Array.prototype.allAsync = async function() {
     for (let i of this) {
         if (i instanceof Function) {
