@@ -1,6 +1,6 @@
 {
   "name": "@dfoverdx/js-extensions",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Set of common javascript extensions that I use",
   "main": "index.js",
   "typings": "./lib/index.d.ts",
