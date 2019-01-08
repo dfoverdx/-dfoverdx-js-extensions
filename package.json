@@ -1,11 +1,12 @@
 {
   "name": "@dfoverdx/js-extensions",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Set of common javascript extensions that I use",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "files": [
-    "./lib/*"
+    "lib/index.js",
+    "lib/*.d.ts"
   ],
   "repository": {
     "type": "git",
