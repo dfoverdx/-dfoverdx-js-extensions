@@ -1,9 +1,12 @@
 {
   "name": "@dfoverdx/js-extensions",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Set of common javascript extensions that I use",
-  "main": "index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "./lib/*"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/dfoverdx/-dfoverdx-js-extensions.git"
@@ -12,6 +15,7 @@
     "build": "npm run build-prod && npm run build-dev",
     "build-prod": "cross-env NODE_ENV=production webpack --mode production --progress --color",
     "build-dev": "cross-env NODE_ENV=development webpack --mode development --progress --color",
+    "watch-dev": "npm run build-dev -- --watch",
     "test": "jest",
     "coverage": "jest --coverage"
   },

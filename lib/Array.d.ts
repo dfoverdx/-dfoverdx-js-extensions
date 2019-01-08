@@ -69,6 +69,14 @@ declare global {
          */
         allAsync(): Promise<boolean>;
         /**
+         * Returns `true` if all values in the array resolve to a value that fits the `predicate`, else `false`.
+         * Elements that are functions are evaluated for before being applied to `predicate`.  Short-circuits if any
+         * value's predicate evaluates to false.
+         *
+         * @param predicate A function that evaluates whether the an element matches the desired condition.
+         */
+        allAsync(predicate: (value: T) => boolean): Promise<boolean>;
+        /**
          * Returns `true` if all elements in the array evaluate to truthy, else `false`.  Elements that are functions
          * are evaluated for truthiness.  Short-circuits if any value evaluates to falsey.  If any element evaluates to
          * a `Promise`, returns a `Promise` with the resulting value.
@@ -77,10 +85,28 @@ declare global {
          */
         all(): T extends (() => Promise<any>) | Promise<any> ? Promise<boolean> : boolean;
         /**
+         * Returns `true` if all elements in the array match `predicate`, else `false`.  Elements that are functions are
+         * evaluated before being applied to `predicate`.  Short-circuits if any value's predicate is false.  If any
+         * element evaluates to a `Promise`, returns a `Promise` with the resulting value.
+         *
+         * @see `Array.prototype.allAsync(predicate)`
+         *
+         * @param predicate A function that evaluates whether the an element matches the desired condition.
+         */
+        all(predicate: (value: T) => boolean): T extends (() => Promise<any>) | Promise<any> ? Promise<boolean> : boolean;
+        /**
          * Returns `true` if any element in the array resolves to truthy, else `false`.  Elements that are functions are
          * evaluated for truthiness. Short-circuits if any element resolves to truthy.
          */
         anyAsync(): Promise<boolean>;
+        /**
+         * Returns `true` if any element in the array resolves to a value that matches `predicate`, else `false`.
+         * Elements that are functions are evaluated before being applied to `predicate`. Short-circuits if any element
+         * matches `predicate`.
+         *
+         * @param predicate A function that evaluates whether the an element matches the desired condition.
+         */
+        anyAsync(predicate: (value: T) => boolean): Promise<boolean>;
         /**
          * Returns `true` if any element in the array evaluate to truthy, else `false`.  Elements that are functions are
          * evaluated for truthiness.  Short-circuits if any value evaluates to truthy.  If any element evaluates to a
@@ -89,6 +115,17 @@ declare global {
          * @see `Array.prototype.anyAsync()`
          */
         any(): T extends (() => Promise<any>) | Promise<any> ? Promise<boolean> : boolean;
+        /**
+         * Returns `true` if any element in the array evaluate to a value that matches `predicate`, else `false`.
+         * Elements that are functions are evaluated before being applied to `predicate`.  Short-circuits if any value's
+         * predicate evaluates to `true`.  If any element evaluates to a `Promise`, returns a `Promise` with the
+         * resulting value.
+         *
+         * @see `Array.prototype.anyAsync()`
+         *
+         * @param predicate A function that evaluates whether the an element matches the desired condition.
+         */
+        any(predicate: (value: T) => boolean): T extends (() => Promise<any>) | Promise<any> ? Promise<boolean> : boolean;
         /**
          * Flattens the array recursively.  Removes empty elements.
          *

@@ -78,6 +78,15 @@ declare global {
         allAsync(): Promise<boolean>;
 
         /**
+         * Returns `true` if all values in the array resolve to a value that fits the `predicate`, else `false`.
+         * Elements that are functions are evaluated for before being applied to `predicate`.  Short-circuits if any
+         * value's predicate evaluates to false.
+         *
+         * @param predicate A function that evaluates whether the an element matches the desired condition.
+         */
+        allAsync(predicate: (value: T) => boolean): Promise<boolean>;
+
+        /**
          * Returns `true` if all elements in the array evaluate to truthy, else `false`.  Elements that are functions
          * are evaluated for truthiness.  Short-circuits if any value evaluates to falsey.  If any element evaluates to
          * a `Promise`, returns a `Promise` with the resulting value.
@@ -87,10 +96,31 @@ declare global {
         all(): T extends (() => Promise<any>) | Promise<any> ? Promise<boolean> : boolean;
 
         /**
+         * Returns `true` if all elements in the array match `predicate`, else `false`.  Elements that are functions are
+         * evaluated before being applied to `predicate`.  Short-circuits if any value's predicate is false.  If any
+         * element evaluates to a `Promise`, returns a `Promise` with the resulting value.
+         *
+         * @see `Array.prototype.allAsync(predicate)`
+         *
+         * @param predicate A function that evaluates whether the an element matches the desired condition.
+         */
+        all(predicate: (value: T) => boolean): 
+            T extends (() => Promise<any>) | Promise<any> ? Promise<boolean> : boolean;
+
+        /**
          * Returns `true` if any element in the array resolves to truthy, else `false`.  Elements that are functions are
          * evaluated for truthiness. Short-circuits if any element resolves to truthy.
-         */    
+         */
         anyAsync(): Promise<boolean>;
+
+        /**
+         * Returns `true` if any element in the array resolves to a value that matches `predicate`, else `false`.
+         * Elements that are functions are evaluated before being applied to `predicate`. Short-circuits if any element
+         * matches `predicate`.
+         *
+         * @param predicate A function that evaluates whether the an element matches the desired condition.
+         */
+        anyAsync(predicate: (value: T) => boolean): Promise<boolean>;
 
         /**
          * Returns `true` if any element in the array evaluate to truthy, else `false`.  Elements that are functions are
@@ -100,6 +130,19 @@ declare global {
          * @see `Array.prototype.anyAsync()`
          */
         any(): T extends (() => Promise<any>) | Promise<any> ? Promise<boolean> : boolean;
+
+        /**
+         * Returns `true` if any element in the array evaluate to a value that matches `predicate`, else `false`.
+         * Elements that are functions are evaluated before being applied to `predicate`.  Short-circuits if any value's
+         * predicate evaluates to `true`.  If any element evaluates to a `Promise`, returns a `Promise` with the
+         * resulting value.
+         *
+         * @see `Array.prototype.anyAsync()`
+         *
+         * @param predicate A function that evaluates whether the an element matches the desired condition.
+         */
+        any(predicate: (value: T) => boolean): 
+            T extends (() => Promise<any>) | Promise<any> ? Promise<boolean> : boolean;
 
         /**
          * Flattens the array recursively.  Removes empty elements.
@@ -240,13 +283,13 @@ Array.prototype.filter = function<T>(callbackfn: (val: T, idx: number, array: T[
     return oldFilter.call(this, callbackfn.bind(thisArg));
 }
 
-Array.prototype.allAsync = async function() {
+Array.prototype.allAsync = async function<T>(pred?: (val: T) => boolean) {
     for (let i of this) {
         if (i instanceof Function) {
             i = await i();
         }
 
-        if (!(await i)) {
+        if (pred ? !pred(await i) : !(await i)) {
             return false;
         }
     }
@@ -255,12 +298,12 @@ Array.prototype.allAsync = async function() {
 }
 
 /**
- * Returns `true` if all elements in the array evaluate to truthy, else `false`.  Short-circuits if any value evaluates to
- * falsey.  If any element evaluates to a `Promise`, returns a `Promise` with the resulting value.
+ * Returns `true` if all elements in the array evaluate to truthy, else `false`.  Short-circuits if any value evaluates
+ * to falsey.  If any element evaluates to a `Promise`, returns a `Promise` with the resulting value.
  *
  * @see `Array.prototype.asyncAll()`
  */
-Array.prototype.all = function() {
+Array.prototype.all = function<T>(pred?: (val: T) => boolean) {
     for (let [idx, i] of this.entries()) {
         if (i instanceof Function) {
             i = i();
@@ -269,10 +312,10 @@ Array.prototype.all = function() {
         if (i instanceof Promise) {
             let arr = [...this];
             arr.slice(idx);
-            return arr.allAsync();
+            return arr.allAsync(pred);
         }
 
-        if (!i) {
+        if (pred ? !pred(i) : !i) {
             return false;
         }
     }
@@ -284,13 +327,13 @@ Array.prototype.all = function() {
  * Returns `true` if any element in the array resolves to truthy, else `false`.  Short-circuits if any element resolves
  * to truthy.
  */
-Array.prototype.anyAsync = async function() {
+Array.prototype.anyAsync = async function<T>(pred?: (val: T) => boolean) {
     for (let i of this) {
         if (i instanceof Function) {
             i = await i();
         }
 
-        if (await i) {
+        if (pred ? pred(await i) : await i) {
             return true;
         }
     }
@@ -304,7 +347,7 @@ Array.prototype.anyAsync = async function() {
  *
  * @see `Array.prototype.asyncAny()`
  */
-Array.prototype.any = function() {
+Array.prototype.any = function<T>(pred?: (val: T) => boolean) {
     for (let [i, val] of this.entries()) {
         if (val instanceof Function) {
             val = val();
@@ -313,10 +356,10 @@ Array.prototype.any = function() {
         if (val instanceof Promise) {
             let arr = [...this];
             arr.slice(i);
-            return arr.anyAsync();
+            return arr.anyAsync(pred);
         }
 
-        if (val) {
+        if (pred ? pred(val) : val) {
             return true;
         }
     }

@@ -22,7 +22,6 @@ declare global {
  *                 `[Object object]`), it's possible that two keys within the Map may evaluate to the same object key.
  *                 In this case, if the associated values are not the same, throws an Error.
  */
-export {};
 declare global {
     interface Map<K, V> {
         /**

@@ -12,8 +12,8 @@ export default function genConfig(_, options) {
         },
 
         output: {
-            filename: isProd ? 'prod.js' : 'dev.js',
-            path: path.resolve(__dirname, 'lib'),
+            filename: 'index.js',
+            path: path.resolve(__dirname, isProd ? 'lib' : 'dev-lib'),
         },
 
         optimization: {
